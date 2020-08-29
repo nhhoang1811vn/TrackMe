@@ -12,11 +12,31 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.ssteam.trackme.R
+import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
+import kotlinx.android.synthetic.main.fragment_recording.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 class RecordingFragment : Fragment(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRecordingEvent(event: RecordingEvent){
+        val timeInMils = event.timeInMils
+        workoutResultView.update(timeInMils)
+
+    }
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     override fun onCreateView(
