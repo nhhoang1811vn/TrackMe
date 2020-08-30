@@ -12,6 +12,7 @@
         android:gravity="center_horizontal"
         >
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvDistance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -29,6 +30,7 @@
         android:gravity="center_horizontal"
         >
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSpeed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             />
@@ -38,11 +40,12 @@
             android:text="@string/speed"
             />
     </LinearLayout>
+
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvTimeRecording"
+        android:id="@+id/tvDuration"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1.5"
         android:layout_gravity="center"
-        />
+        android:layout_weight="1.5"
+        android:gravity="center" />
 </LinearLayout>

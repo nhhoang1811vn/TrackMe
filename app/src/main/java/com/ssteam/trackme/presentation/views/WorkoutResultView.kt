@@ -3,8 +3,11 @@ package com.ssteam.trackme.presentation.views
 import android.content.Context
 import android.util.AttributeSet
 import com.ssteam.trackme.R
+import com.ssteam.trackme.presentation.utils.Utils
 import com.ssteam.trackme.presentation.views.base.BaseLinearLayout
 import kotlinx.android.synthetic.main.view_workout_result.view.*
+import java.text.SimpleDateFormat
+import java.util.concurrent.TimeUnit
 
 class WorkoutResultView : BaseLinearLayout{
     constructor(context: Context) : super(context)
@@ -15,9 +18,15 @@ class WorkoutResultView : BaseLinearLayout{
     override fun setupUI() {
 
     }
-
-    fun update(timeInMils: Long) {
-        tvTimeRecording.text = timeInMils.toString()
+    fun update(distanceInKiloMeter: Float?, speedInKiloMeterPerHour: Float?, duration: Long?){
+        distanceInKiloMeter?.let{
+            tvDistance.text = it.toString()
+        }
+        speedInKiloMeterPerHour?.let{
+            tvSpeed.text = it.toString()
+        }
+        duration?.let {
+            tvDuration.text =Utils.getDurationText(it)
+        }
     }
-
 }
