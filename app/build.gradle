@@ -26,8 +26,20 @@ android {
     buildFeatures {
         dataBinding true
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
-
+ext {
+    nav_version = "2.3.0"
+    daggerVersion = "2.25.2"
+    timberVersion = "4.7.1"
+    lifecycleVersion = "2.2.0"
+}
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -45,11 +57,24 @@ dependencies {
 
     implementation "org.permissionsdispatcher:permissionsdispatcher:4.7.0"
     kapt "org.permissionsdispatcher:permissionsdispatcher-processor:4.7.0"
-    def work_version = "2.4.0"
-    implementation "androidx.work:work-runtime-ktx:$work_version"
+    //def work_version = "2.4.0"
+    //implementation "androidx.work:work-runtime-ktx:$work_version"
 
     def nav_version = "2.3.0"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
+
+    implementation "com.google.dagger:dagger-android:$daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    implementation "com.jakewharton.timber:timber:$timberVersion"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
 
 }

@@ -6,8 +6,6 @@ import com.ssteam.trackme.R
 import com.ssteam.trackme.presentation.utils.Utils
 import com.ssteam.trackme.presentation.views.base.BaseLinearLayout
 import kotlinx.android.synthetic.main.view_workout_result.view.*
-import java.text.SimpleDateFormat
-import java.util.concurrent.TimeUnit
 
 class WorkoutResultView : BaseLinearLayout{
     constructor(context: Context) : super(context)

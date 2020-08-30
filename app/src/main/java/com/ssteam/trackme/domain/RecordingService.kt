@@ -1,6 +1,5 @@
 package com.ssteam.trackme.domain
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
@@ -12,6 +11,7 @@ import com.ssteam.trackme.domain.eventbusmodels.RecordingStatusEvent
 import com.ssteam.trackme.domain.models.Location
 import org.greenrobot.eventbus.EventBus
 import java.util.*
+
 @SuppressLint("MissingPermission")
 //suppressLint because of ensure grant these permissions
 class RecordingService : Service() {

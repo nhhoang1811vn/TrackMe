@@ -8,9 +8,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.work.WorkRequest
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.transition.TransitionInflater
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -20,22 +22,31 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.gms.maps.model.RoundCap
 import com.ssteam.trackme.R
+import com.ssteam.trackme.databinding.FragmentRecordingBinding
+import com.ssteam.trackme.di.Injectable
 import com.ssteam.trackme.domain.RecordingService
 import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
 import com.ssteam.trackme.domain.eventbusmodels.RecordingStatusEvent
 import com.ssteam.trackme.domain.models.Location
+import com.ssteam.trackme.presentation.utils.autoCleared
 import kotlinx.android.synthetic.main.fragment_recording.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import javax.inject.Inject
 
 @SuppressLint("MissingPermission")
-class RecordingFragment : Fragment(), OnMapReadyCallback {
+class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    val viewModel: RecordingViewModel by viewModels {
+        viewModelFactory
+    }
+    var binding by autoCleared<FragmentRecordingBinding>()
+
     private lateinit var mMap: GoogleMap
     private var lastIndexDrawed = 0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRecordingEvent(event: RecordingEvent) {
@@ -52,7 +63,6 @@ class RecordingFragment : Fragment(), OnMapReadyCallback {
                 val locations = event.locations
                 val size = locations.size
                 val needToDrawLocations = locations.subList(lastIndexDrawed, size)
-                Log.d("RecordingFragment", needToDrawLocations.size.toString())
                 if (needToDrawLocations.size >= 2){
                     drawRoute(needToDrawLocations)
                     lastIndexDrawed = size - 1
@@ -84,7 +94,20 @@ class RecordingFragment : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_recording, container, false)
+        val dataBinding = DataBindingUtil.inflate<FragmentRecordingBinding>(
+            inflater,
+            R.layout.fragment_recording,
+            container,
+            false
+        )
+       /* dataBinding.retryCallback = object : RetryCallback {
+            override fun retry() {
+                repoViewModel.retry()
+            }
+        }*/
+        binding = dataBinding
+        //sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
+        return dataBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -1,14 +1,10 @@
 package com.ssteam.trackme.presentation
 
 import android.Manifest
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.ssteam.trackme.R
-import kotlinx.android.synthetic.main.activity_main.*
 import permissions.dispatcher.NeedsPermission
 import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
