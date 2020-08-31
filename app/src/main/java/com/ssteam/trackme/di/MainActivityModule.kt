@@ -15,7 +15,7 @@
  */
 
 package com.ssteam.trackme.di
-import com.ssteam.trackme.presentation.MainActivity
+import com.ssteam.trackme.presentation.ui.MainActivity
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector

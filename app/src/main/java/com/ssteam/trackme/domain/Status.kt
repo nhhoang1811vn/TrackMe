@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.ssteam.trackme.di
+package com.ssteam.trackme.domain
 
-import com.ssteam.trackme.presentation.ui.history.HistoryFragment
-import com.ssteam.trackme.presentation.ui.recording.RecordingFragment
-import dagger.Module
-import dagger.android.ContributesAndroidInjector
-
-@Suppress("unused")
-@Module
-abstract class FragmentBuildersModule {
-    @ContributesAndroidInjector
-    abstract fun contributeHistoryFragment(): HistoryFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeRecordingFragment(): RecordingFragment
+/**
+ * Status of a resource that is provided to the UI.
+ *
+ *
+ * These are usually created by the Repository classes where they return
+ * `LiveData<Resource<T>>` to pass back the latest data to the UI with its fetch status.
+ */
+enum class Status {
+    SUCCESS,
+    ERROR,
+    LOADING
 }

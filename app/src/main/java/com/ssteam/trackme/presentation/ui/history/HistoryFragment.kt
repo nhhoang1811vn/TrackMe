@@ -1,4 +1,4 @@
-package com.ssteam.trackme.presentation.history
+package com.ssteam.trackme.presentation.ui.history
 
 import android.os.Bundle
 import android.view.LayoutInflater

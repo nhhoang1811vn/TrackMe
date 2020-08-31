@@ -4,15 +4,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="androidx.lifecycle.LiveData"/>
         <variable
             name="viewModel"
-            type="com.ssteam.trackme.presentation.recording.RecordingViewModel" />
+            type="com.ssteam.trackme.presentation.ui.recording.RecordingViewModel" />
+        <variable
+            name="isRunning"
+            type="LiveData&lt;Boolean>" />
+        <variable
+            name="pauseCallback"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="resumeCallback"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="stopCallback"
+            type="android.view.View.OnClickListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".presentation.recording.RecordingFragment">
+        tools:context=".presentation.ui.recording.RecordingFragment">
 
         <fragment
             android:id="@+id/map"
@@ -25,7 +38,7 @@
             tools:context=".MapsActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-        <com.ssteam.trackme.presentation.views.WorkoutResultView
+        <com.ssteam.trackme.presentation.ui.views.WorkoutResultView
             android:id="@+id/workoutResultView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,20 +55,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            >
 
             <LinearLayout
                 android:id="@+id/viewActionRunning"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                visibleGone="@{isRunning}"
+                >
 
                 <ImageButton
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_pause"
                     android:background="?selectableItemBackgroundBorderless"
+                    android:onClick="@{pauseCallback}"
                     />
             </LinearLayout>
 
@@ -64,13 +83,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                visibleGone="@{!isRunning}"
+                >
 
                 <ImageButton
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_refresh"
                     android:background="?selectableItemBackgroundBorderless"
+                    android:onClick="@{resumeCallback}"
                     />
 
                 <ImageButton
@@ -78,6 +100,7 @@
                     android:layout_height="36dp"
                     android:src="@drawable/ic_stop"
                     android:background="?selectableItemBackgroundBorderless"
+                    android:onClick="@{stopCallback}"
                     />
             </LinearLayout>
         </LinearLayout>

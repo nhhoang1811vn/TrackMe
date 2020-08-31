@@ -1,4 +1,4 @@
-package com.ssteam.trackme.presentation.views.base
+package com.ssteam.trackme.presentation.ui.views.base
 
 import android.content.Context
 import android.util.AttributeSet

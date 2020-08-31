@@ -39,6 +39,7 @@ ext {
     daggerVersion = "2.25.2"
     timberVersion = "4.7.1"
     lifecycleVersion = "2.2.0"
+    roomVersion = "2.2.5"
 }
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -71,10 +72,16 @@ dependencies {
 
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
-    // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
-    // LiveData
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
+
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
+
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
 
 }

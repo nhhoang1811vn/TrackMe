@@ -16,9 +16,36 @@
 
 package com.ssteam.trackme.di
 
+import android.app.Application
+import android.content.Context
+import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
+import com.ssteam.trackme.data.db.AppDatabase
+import com.ssteam.trackme.domain.TrackingSession
+import com.ssteam.trackme.domain.TrackingSessionIpm
 import dagger.Module
+import dagger.Provides
+import javax.inject.Singleton
 
 @Module(includes = [ViewModelModule::class])
 class AppModule {
+    @Singleton
+    @Provides
+    fun provideContext(application: Application): Context = application.applicationContext
+
+    @Singleton
+    @Provides
+    fun providedTrackingSession(context: Context) : TrackingSession{
+        return TrackingSessionIpm(context)
+    }
+    @Singleton
+    @Provides
+    fun provideAppDatabase(context: Context): AppDatabase {
+        val DATABASE_NAME = "Trackme.DB"
+        return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
+    }
 
 }

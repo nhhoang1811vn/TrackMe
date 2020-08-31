@@ -1,10 +1,9 @@
-package com.ssteam.trackme.presentation.recording
+package com.ssteam.trackme.presentation.ui.recording
 
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.transition.TransitionInflater
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,8 +24,8 @@ import com.ssteam.trackme.databinding.FragmentRecordingBinding
 import com.ssteam.trackme.di.Injectable
 import com.ssteam.trackme.domain.RecordingService
 import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
-import com.ssteam.trackme.domain.eventbusmodels.RecordingStatusEvent
 import com.ssteam.trackme.domain.models.Location
+import com.ssteam.trackme.domain.models.RecordingItem
 import com.ssteam.trackme.presentation.utils.autoCleared
 import kotlinx.android.synthetic.main.fragment_recording.*
 import org.greenrobot.eventbus.EventBus
@@ -46,38 +44,40 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
     var binding by autoCleared<FragmentRecordingBinding>()
 
     private lateinit var mMap: GoogleMap
-    private var lastIndexDrawed = 0
+    private var drewLastIndex = 0
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onRecordingEvent(event: RecordingEvent) {
-        when (event.status) {
-            RecordingStatusEvent.READY -> {
-                //Log.d("RecordingFragment", System.currentTimeMillis().toString())
-                event.locations[0].let {
-                    val latLng = LatLng(it.lat, it.lng)
-                    drawStartLocation(latLng)
-                    moveCamera(latLng)
-                }
-            }
-            RecordingStatusEvent.RUNNING -> {
-                val locations = event.locations
-                val size = locations.size
-                val needToDrawLocations = locations.subList(lastIndexDrawed, size)
-                if (needToDrawLocations.size >= 2){
-                    drawRoute(needToDrawLocations)
-                    lastIndexDrawed = size - 1
-                }
-                val lastLocation = locations[size - 1]
-                moveCamera(LatLng(lastLocation.lat, lastLocation.lng))
-
-                workoutResultView.update(
-                    event.distanceInKiloMeter,
-                    event.speedInKiloMeterPerHour,
-                    event.duration
-                )
+    fun onRecordingItem(item: RecordingItem) {
+        viewModel.addRecordingItem(item)
+        val validLocations = viewModel.getValidLocations()
+        val size = validLocations.size
+        if (size == 1){
+            val startLocation = validLocations[0]
+            val latLng = LatLng(startLocation.lat, startLocation.lng)
+            drawStartPoint(latLng)
+            moveCamera(latLng)
+        }else{
+            val needToDrawLocations = validLocations.subList(drewLastIndex, size)
+            if (needToDrawLocations.size >= 2){
+                drawRoute(needToDrawLocations)
+                drewLastIndex = size - 1
             }
         }
-
+        updateResultView(item)
+    }
+    private fun drawStartPoint(latLng: LatLng){
+        mMap.addMarker(
+            MarkerOptions()
+                .position(latLng)
+                .title("Start location")
+        )
+    }
+    private fun updateResultView(item: RecordingItem){
+        workoutResultView.update(
+            item.distance,
+            item.speed,
+            viewModel.getDurationText()
+        )
     }
 
     override fun onStart() {
@@ -100,11 +100,6 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
             container,
             false
         )
-       /* dataBinding.retryCallback = object : RetryCallback {
-            override fun retry() {
-                repoViewModel.retry()
-            }
-        }*/
         binding = dataBinding
         //sharedElementReturnTransition = TransitionInflater.from(context).inflateTransition(R.transition.move)
         return dataBinding.root
@@ -112,7 +107,17 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        binding.lifecycleOwner = this
+        binding.isRunning = viewModel.isRunning
+        binding.pauseCallback = View.OnClickListener {
+            viewModel.pause()
+        }
+        binding.resumeCallback = View.OnClickListener {
+            viewModel.resume()
+        }
+        binding.stopCallback = View.OnClickListener {
+            viewModel.stop()
+        }
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -122,24 +127,14 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
         @JvmStatic
         fun newInstance() = RecordingFragment()
     }
-
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.isMyLocationEnabled = true
-        startRecordingService()
-    }
-
-    private fun drawStartLocation(latLng: LatLng) {
-        mMap.addMarker(
-            MarkerOptions()
-                .position(latLng)
-                .title("Start location")
-        )
+        viewModel.start()
     }
 
     private fun moveCamera(latLng: LatLng) {
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 14f))
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
     }
     private fun drawRoute(locations: List<Location>) {
         for (i in 0..locations.size-2) {
@@ -154,10 +149,5 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
             polyLine.startCap = RoundCap()
             polyLine.endCap = RoundCap()
         }
-    }
-
-    private fun startRecordingService() {
-        val intent = Intent(requireActivity(), RecordingService::class.java)
-        requireContext().startService(intent)
     }
 }

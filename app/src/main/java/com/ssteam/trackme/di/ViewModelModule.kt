@@ -19,7 +19,7 @@ package com.ssteam.trackme.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ssteam.trackme.presentation.TrackMeViewModelFactory
-import com.ssteam.trackme.presentation.recording.RecordingViewModel
+import com.ssteam.trackme.presentation.ui.recording.RecordingViewModel
 
 import dagger.Binds
 import dagger.Module

@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/historyFragment"
-        android:name="com.ssteam.trackme.presentation.history.HistoryFragment"
+        android:name="com.ssteam.trackme.presentation.ui.history.HistoryFragment"
         android:label="fragment_history"
         tools:layout="@layout/fragment_history" />
     <fragment
         android:id="@+id/recordingFragment"
-        android:name="com.ssteam.trackme.presentation.recording.RecordingFragment"
+        android:name="com.ssteam.trackme.presentation.ui.recording.RecordingFragment"
         android:label="fragment_recording"
         tools:layout="@layout/fragment_recording" />
 </navigation>
