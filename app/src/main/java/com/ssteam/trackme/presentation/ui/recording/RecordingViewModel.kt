@@ -3,6 +3,7 @@ package com.ssteam.trackme.presentation.ui.recording
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.switchMap
 import com.ssteam.trackme.domain.TrackingSession
 import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
@@ -12,7 +13,11 @@ import com.ssteam.trackme.presentation.utils.Utils
 import javax.inject.Inject
 
 class RecordingViewModel @Inject constructor(val trackingSession: TrackingSession, val resultRepo: ResultRepository): ViewModel() {
-    private val recordingItems = mutableListOf<RecordingItem>()
+    private val actionSave = MutableLiveData<Result>()
+    var saveResultState = actionSave.switchMap {
+        resultRepo.insert(it)
+    }
+    private var recordingItems = mutableListOf<RecordingItem>()
     private val _isRunning = MutableLiveData<Boolean>()
     val isRunning: LiveData<Boolean>
         get() = _isRunning
@@ -40,7 +45,10 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
         val duration = getDuration()
 
         val result = Result(locations,distance,avgSpeed,duration)
-
+        saveResult(result)
+    }
+    private fun saveResult(result: Result){
+        actionSave.value = result
     }
     private fun getDistance() : Double{
         var distance = 0.0
@@ -62,16 +70,15 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
         return recordingItems.size * 1000L
     }
 
-
-    fun addRecordingItem(item: RecordingItem) {
-        recordingItems.add(item)
-    }
-
     fun getDurationText(): String {
         return Utils.getDurationText(recordingItems.size*1000L)
     }
 
     fun getValidLocations(): List<Location> {
         return recordingItems.mapNotNull { it.location }
+    }
+
+    fun setRecordingItem(items: MutableList<RecordingItem>) {
+        recordingItems = items
     }
 }

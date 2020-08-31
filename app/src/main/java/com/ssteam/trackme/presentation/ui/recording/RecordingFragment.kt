@@ -7,10 +7,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -23,6 +26,7 @@ import com.ssteam.trackme.R
 import com.ssteam.trackme.databinding.FragmentRecordingBinding
 import com.ssteam.trackme.di.Injectable
 import com.ssteam.trackme.domain.RecordingService
+import com.ssteam.trackme.domain.Status
 import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
 import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
@@ -47,8 +51,8 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
     private var drewLastIndex = 0
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onRecordingItem(item: RecordingItem) {
-        viewModel.addRecordingItem(item)
+    fun onRecordingItems(items: MutableList<RecordingItem>) {
+        viewModel.setRecordingItem(items)
         val validLocations = viewModel.getValidLocations()
         val size = validLocations.size
         if (size == 1){
@@ -63,7 +67,7 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
                 drewLastIndex = size - 1
             }
         }
-        updateResultView(item)
+        updateResultView(items.last())
     }
     private fun drawStartPoint(latLng: LatLng){
         mMap.addMarker(
@@ -118,6 +122,25 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
         binding.stopCallback = View.OnClickListener {
             viewModel.stop()
         }
+        binding.saveResultState = viewModel.saveResultState
+
+        viewModel.saveResultState.observe(viewLifecycleOwner, Observer {
+            when(it.status){
+                Status.SUCCESS -> {
+                    findNavController().popBackStack()
+                }
+                Status.ERROR -> {
+                    //TODO
+                    //should be move to BaseActivity, BaseFragment
+                    //(requireActivity() as BaseActivity).showToast()
+                    Toast.makeText(requireContext(),"save result error: ${it.message}", Toast.LENGTH_LONG).show()
+                }
+                Status.LOADING -> {
+                    //already mapped
+                }
+            }
+        })
+
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)

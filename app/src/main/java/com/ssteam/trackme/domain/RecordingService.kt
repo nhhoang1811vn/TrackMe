@@ -32,6 +32,7 @@ class RecordingService : Service() {
     private var previousLocation : Location?=null
     private var locations = mutableListOf<Location>()
     private var totalDistanceInKm = 0.0
+    private var recordingItems = mutableListOf<RecordingItem>()
     override fun onBind(intent: Intent?): IBinder? {
         return null
     }
@@ -68,11 +69,13 @@ class RecordingService : Service() {
         }
         Timber.d("location: %f, %f",location?.lat, location?.lng)
         val recordingItem = RecordingItem(totalDistanceInKm,speedInKiloMeterPerHour,location)
-        EventBus.getDefault().post(recordingItem)
+        recordingItems.add(recordingItem)
+        EventBus.getDefault().post(recordingItems)
 
     }
     private fun startRecording() {
         startLocationUpdates()
+        recordingItems.clear()
         locations.clear()
         totalDistanceInKm = 0.0
         timer.schedule(object: TimerTask(){
