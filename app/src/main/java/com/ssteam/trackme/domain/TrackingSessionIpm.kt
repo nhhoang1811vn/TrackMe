@@ -3,7 +3,6 @@ package com.ssteam.trackme.domain
 import android.content.Context
 import android.content.Intent
 import com.ssteam.trackme.domain.eventbusmodels.MessageEvent
-import com.ssteam.trackme.domain.models.RecordingItem
 import org.greenrobot.eventbus.EventBus
 import javax.inject.Inject
 

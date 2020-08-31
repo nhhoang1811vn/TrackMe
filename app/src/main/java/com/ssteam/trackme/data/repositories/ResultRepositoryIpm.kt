@@ -2,15 +2,12 @@ package com.ssteam.trackme.data.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.ssteam.trackme.data.db.AppDatabase
 import com.ssteam.trackme.data.db.mapper.ResultMapper
 import com.ssteam.trackme.domain.AppExecutors
 import com.ssteam.trackme.domain.Resource
 import com.ssteam.trackme.domain.models.Result
 import com.ssteam.trackme.domain.repositories.ResultRepository
-import java.lang.Exception
 import javax.inject.Inject
 
 class ResultRepositoryIpm @Inject constructor(appDatabase: AppDatabase, val appExecutors: AppExecutors, val mapper: ResultMapper) : ResultRepository {

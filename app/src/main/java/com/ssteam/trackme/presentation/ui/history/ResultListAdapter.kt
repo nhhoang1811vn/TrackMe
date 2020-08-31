@@ -16,21 +16,16 @@
 
 package com.ssteam.trackme.presentation.ui.history
 
-import androidx.databinding.DataBindingComponent
-import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.DiffUtil
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.google.android.gms.maps.CameraUpdate
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.ssteam.trackme.R
 import com.ssteam.trackme.databinding.ResultItemBinding
 import com.ssteam.trackme.domain.AppExecutors
-import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.Result
 import com.ssteam.trackme.presentation.ui.common.DataBoundListAdapter
 import com.ssteam.trackme.presentation.utils.Utils

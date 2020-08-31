@@ -5,11 +5,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.ssteam.trackme.R
-import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
 import permissions.dispatcher.NeedsPermission
-import permissions.dispatcher.OnPermissionDenied
 import permissions.dispatcher.RuntimePermissions
 import javax.inject.Inject
 

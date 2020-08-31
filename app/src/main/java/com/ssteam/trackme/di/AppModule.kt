@@ -19,8 +19,6 @@ package com.ssteam.trackme.di
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.ssteam.trackme.data.db.AppDatabase
 import com.ssteam.trackme.domain.TrackingSession
 import com.ssteam.trackme.domain.TrackingSessionIpm

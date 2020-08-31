@@ -3,7 +3,6 @@ package com.ssteam.trackme.presentation.ui.views
 import android.content.Context
 import android.util.AttributeSet
 import com.ssteam.trackme.R
-import com.ssteam.trackme.presentation.utils.Utils
 import com.ssteam.trackme.presentation.ui.views.base.BaseLinearLayout
 import kotlinx.android.synthetic.main.view_workout_result.view.*
 

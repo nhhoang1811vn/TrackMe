@@ -4,19 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
 import android.os.*
-import android.util.Log
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.model.LatLng
 import com.ssteam.trackme.domain.eventbusmodels.MessageEvent
-import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
 import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
 import com.ssteam.trackme.presentation.utils.Utils
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import timber.log.Timber
-import java.sql.Time
 import java.util.*
 
 @SuppressLint("MissingPermission")

@@ -2,9 +2,7 @@ package com.ssteam.trackme.presentation.ui.recording
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.DialogInterface
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -22,16 +20,10 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
-import com.google.android.gms.maps.model.RoundCap
 import com.ssteam.trackme.R
 import com.ssteam.trackme.databinding.FragmentRecordingBinding
 import com.ssteam.trackme.di.Injectable
-import com.ssteam.trackme.domain.RecordingService
 import com.ssteam.trackme.domain.Status
-import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
-import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
 import com.ssteam.trackme.presentation.utils.Utils
 import com.ssteam.trackme.presentation.utils.autoCleared

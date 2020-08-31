@@ -6,7 +6,6 @@ import androidx.room.TypeConverters
 import com.ssteam.trackme.data.db.converter.TimestampConverter
 import com.ssteam.trackme.data.db.dao.ResultDao
 import com.ssteam.trackme.data.db.entities.LocationEntity
-import com.ssteam.trackme.data.db.entities.ResultEntity
 import com.ssteam.trackme.data.db.entities.ResultInfoEntity
 
 @Database(entities = [ResultInfoEntity::class, LocationEntity::class], version = 1)

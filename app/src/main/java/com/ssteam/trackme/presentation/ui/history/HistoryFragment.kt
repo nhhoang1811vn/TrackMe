@@ -4,25 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.doOnPreDraw
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.FragmentNavigatorExtras
-import androidx.navigation.fragment.findNavController
-import com.google.android.gms.maps.SupportMapFragment
 import com.ssteam.trackme.R
 import com.ssteam.trackme.databinding.FragmentHistoryBinding
-import com.ssteam.trackme.databinding.FragmentRecordingBinding
 import com.ssteam.trackme.di.Injectable
 import com.ssteam.trackme.domain.AppExecutors
-import com.ssteam.trackme.domain.Status
 import com.ssteam.trackme.presentation.ui.MainActivity
 import com.ssteam.trackme.presentation.ui.openRecordingFragmentWithPermissionCheck
-import com.ssteam.trackme.presentation.ui.recording.RecordingViewModel
 import com.ssteam.trackme.presentation.utils.autoCleared
 import javax.inject.Inject
 

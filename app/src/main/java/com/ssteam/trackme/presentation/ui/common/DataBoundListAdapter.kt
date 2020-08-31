@@ -16,11 +16,11 @@
 
 package com.ssteam.trackme.presentation.ui.common
 
+import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.AsyncDifferConfig
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import com.ssteam.trackme.domain.AppExecutors
 
 /**

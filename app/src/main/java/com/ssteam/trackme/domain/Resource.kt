@@ -16,9 +16,7 @@
 
 package com.ssteam.trackme.domain
 
-import com.ssteam.trackme.domain.Status.ERROR
-import com.ssteam.trackme.domain.Status.LOADING
-import com.ssteam.trackme.domain.Status.SUCCESS
+import com.ssteam.trackme.domain.Status.*
 
 /**
  * A generic class that holds a value with its loading status.
