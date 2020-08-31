@@ -1,9 +1,12 @@
 package com.ssteam.trackme.presentation.ui.recording
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +33,7 @@ import com.ssteam.trackme.domain.Status
 import com.ssteam.trackme.domain.eventbusmodels.RecordingEvent
 import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
+import com.ssteam.trackme.presentation.utils.Utils
 import com.ssteam.trackme.presentation.utils.autoCleared
 import kotlinx.android.synthetic.main.fragment_recording.*
 import org.greenrobot.eventbus.EventBus
@@ -58,24 +62,18 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
         if (size == 1){
             val startLocation = validLocations[0]
             val latLng = LatLng(startLocation.lat, startLocation.lng)
-            drawStartPoint(latLng)
+            Utils.drawStartLocation(mMap,startLocation)
             moveCamera(latLng)
         }else{
             val needToDrawLocations = validLocations.subList(drewLastIndex, size)
             if (needToDrawLocations.size >= 2){
-                drawRoute(needToDrawLocations)
+                Utils.drawRoute(mMap,needToDrawLocations)
                 drewLastIndex = size - 1
             }
         }
         updateResultView(items.last())
     }
-    private fun drawStartPoint(latLng: LatLng){
-        mMap.addMarker(
-            MarkerOptions()
-                .position(latLng)
-                .title("Start location")
-        )
-    }
+
     private fun updateResultView(item: RecordingItem){
         workoutResultView.update(
             item.distance,
@@ -123,7 +121,7 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
             viewModel.stop()
         }
         binding.saveResultState = viewModel.saveResultState
-
+        //binding.isLoading = viewModel.isLoading
         viewModel.saveResultState.observe(viewLifecycleOwner, Observer {
             when(it.status){
                 Status.SUCCESS -> {
@@ -144,6 +142,22 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        checkGPSEnable()
+    }
+    private fun checkGPSEnable(){
+        if (!Utils.isGpsEnable(requireContext())){
+            showTipsEnableGPS()
+        }
+    }
+    private fun showTipsEnableGPS(){
+        AlertDialog.Builder(context)
+            .setTitle(R.string.title_dialog_turn_on_gps)
+            .setMessage(R.string.message_dialog_turn_on_gps)
+            .setPositiveButton(R.string.action_turn_on_gps)
+            { _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+            .show()
+
     }
 
     companion object {
@@ -159,18 +173,5 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
     private fun moveCamera(latLng: LatLng) {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
     }
-    private fun drawRoute(locations: List<Location>) {
-        for (i in 0..locations.size-2) {
-            val firstLocation = locations[i]
-            val secondLocation = locations[i + 1]
-            val polyLine = mMap.addPolyline(PolylineOptions().color(Color.RED)
-                .add(
-                    LatLng(firstLocation.lat, firstLocation.lng),
-                    LatLng(secondLocation.lat, secondLocation.lng)
-                )
-            )
-            polyLine.startCap = RoundCap()
-            polyLine.endCap = RoundCap()
-        }
-    }
+
 }

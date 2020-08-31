@@ -31,7 +31,7 @@ class ResultRepositoryIpm @Inject constructor(appDatabase: AppDatabase, val appE
             appExecutors.diskIO().execute{
                 dao.insertResult(mapper.mapToEntity(model))
                 appExecutors.mainThread().execute{
-                    //liveData.value = Resource.success(true)
+                    liveData.value = Resource.success(true)
                 }
             }
         }catch (ex: Exception){

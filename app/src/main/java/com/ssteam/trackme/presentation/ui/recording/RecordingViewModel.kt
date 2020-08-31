@@ -10,6 +10,7 @@ import com.ssteam.trackme.domain.models.RecordingItem
 import com.ssteam.trackme.domain.models.Result
 import com.ssteam.trackme.domain.repositories.ResultRepository
 import com.ssteam.trackme.presentation.utils.Utils
+import java.util.*
 import javax.inject.Inject
 
 class RecordingViewModel @Inject constructor(val trackingSession: TrackingSession, val resultRepo: ResultRepository): ViewModel() {
@@ -17,6 +18,7 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
     var saveResultState = actionSave.switchMap {
         resultRepo.insert(it)
     }
+    //var isLoading = MutableLiveData<>
     private var recordingItems = mutableListOf<RecordingItem>()
     private val _isRunning = MutableLiveData<Boolean>()
     val isRunning: LiveData<Boolean>
@@ -44,7 +46,12 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
         val avgSpeed = getAvgSpeed()
         val duration = getDuration()
 
-        val result = Result(locations,distance,avgSpeed,duration)
+        val result = Result(locations = locations,
+            distance = distance,
+            avgSpeed = avgSpeed,
+            duration = duration,
+            createdDate = Date()
+            )
         saveResult(result)
     }
     private fun saveResult(result: Result){

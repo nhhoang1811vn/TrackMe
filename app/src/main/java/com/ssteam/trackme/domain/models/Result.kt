@@ -1,3 +1,12 @@
 package com.ssteam.trackme.domain.models
 
-data class Result(val locations: MutableList<Location?>, val distance: Double, val avgSpeed: Double?, val duration: Long)
+import java.util.*
+
+data class Result(
+    val id : String = UUID.randomUUID().toString(),
+    val locations: MutableList<Location?>,
+    val distance: Double,
+    val avgSpeed: Double?,
+    val duration: Long,
+    val createdDate: Date?
+    )

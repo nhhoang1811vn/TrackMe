@@ -23,6 +23,6 @@ interface ResultDao {
         insert(result.locations)
     }
 
-    @Query("SELECT * FROM ResultInfoEntity")
+    @Query("SELECT * FROM ResultInfoEntity ORDER BY createdDate DESC")
     fun findAll(): LiveData<List<ResultEntity>>
 }

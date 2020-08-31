@@ -55,7 +55,12 @@ class RecordingService : Service() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
     }
+    private var lookingForStartLocation = true
     private fun process(){
+        if (lookingForStartLocation && lastLocation==null){
+            return
+        }
+        lookingForStartLocation = false
         val speedInKiloMeterPerHour : Double? = lastLocation?.speed?.times(3.6)
         var location : Location? = null
         lastLocation?.let {
@@ -67,11 +72,9 @@ class RecordingService : Service() {
             }
             previousLocation = location
         }
-        Timber.d("location: %f, %f",location?.lat, location?.lng)
         val recordingItem = RecordingItem(totalDistanceInKm,speedInKiloMeterPerHour,location)
         recordingItems.add(recordingItem)
         EventBus.getDefault().post(recordingItems)
-
     }
     private fun startRecording() {
         startLocationUpdates()

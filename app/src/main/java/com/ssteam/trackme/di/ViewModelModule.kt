@@ -19,6 +19,7 @@ package com.ssteam.trackme.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ssteam.trackme.presentation.TrackMeViewModelFactory
+import com.ssteam.trackme.presentation.ui.history.HistoryViewModel
 import com.ssteam.trackme.presentation.ui.recording.RecordingViewModel
 
 import dagger.Binds
@@ -32,6 +33,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RecordingViewModel::class)
     abstract fun bindRecordingViewModel(viewModel: RecordingViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryViewModel::class)
+    abstract fun bindHistoryViewModel(viewModel: HistoryViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: TrackMeViewModelFactory): ViewModelProvider.Factory

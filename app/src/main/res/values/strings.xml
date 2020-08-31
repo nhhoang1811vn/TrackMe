@@ -4,4 +4,10 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="distance">Distance</string>
     <string name="speed">Speed</string>
+    <string name="no_data">No data</string>
+
+
+    <string name="title_dialog_turn_on_gps">GPS is disabled</string>
+    <string name="message_dialog_turn_on_gps">This app wont work when GPS is turned OFF. Please go to your device\'s Settings and turn it on</string>
+    <string name="action_turn_on_gps">OPEN LOCATION SETTINGS</string>
 </resources>

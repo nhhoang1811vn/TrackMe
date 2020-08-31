@@ -1,14 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.ui.history.HistoryFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <import type="androidx.lifecycle.LiveData"/>
+        <import type="com.ssteam.trackme.domain.Resource"/>
+        <import type="com.ssteam.trackme.domain.Status"/>
+        <import type="com.ssteam.trackme.domain.models.Result"/>
+        <import type="java.util.List"/>
+        <variable
+            name="recordingCallback"
+            type="android.view.View.OnClickListener" />
+        <variable
+            name="results"
+            type="LiveData&lt;Resource&lt;List&lt;Result>>>"/>
+    </data>
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_data"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            visibleGone="@{results.status!=Status.LOADING &amp;&amp; results.data.size() == 0}"
+            />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/resultList"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:listitem="@layout/result_item"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/btnRecord"
+            visibleGone="@{results.data.size() > 0}"
+            />
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/btnRecord"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/ic_record"
+            android:background="?selectableItemBackgroundBorderless"
+            android:onClick="@{recordingCallback}"
+            />
+        <include
+            layout="@layout/loading_state"
+            app:resource="@{(Resource) results}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
