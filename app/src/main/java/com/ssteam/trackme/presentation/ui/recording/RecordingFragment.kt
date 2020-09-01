@@ -56,6 +56,7 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
             val latLng = LatLng(startLocation.lat, startLocation.lng)
             Utils.drawStartLocation(mMap,startLocation)
             moveCamera(latLng)
+            viewModel.setRunningState()
         }else{
             val needToDrawLocations = validLocations.subList(drewLastIndex, size)
             if (needToDrawLocations.size >= 2){
@@ -102,7 +103,9 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
-        binding.isRunning = viewModel.isRunning
+        binding.waitingState = viewModel.waitingState
+        binding.runningState = viewModel.runningState
+        binding.pauseState =  viewModel.pauseState
         binding.pauseCallback = View.OnClickListener {
             viewModel.pause()
         }
@@ -134,12 +137,12 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
         val mapFragment = childFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-        checkGPSEnable()
     }
-    private fun checkGPSEnable(){
+    private fun checkGPSEnableAndStart(){
         if (!Utils.isGpsEnable(requireContext())){
             showTipsEnableGPS()
+        }else{
+            viewModel.start()
         }
     }
     private fun showTipsEnableGPS(){
@@ -147,23 +150,31 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
             .setTitle(R.string.title_dialog_turn_on_gps)
             .setMessage(R.string.message_dialog_turn_on_gps)
             .setPositiveButton(R.string.action_turn_on_gps)
-            { _, _ -> startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+            { _, _ -> startActivityForResult(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), RC_OPEN_LOCATION_SETTINGS) }
             .show()
 
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = RecordingFragment()
     }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         mMap.isMyLocationEnabled = true
-        viewModel.start()
+        checkGPSEnableAndStart()
     }
-
     private fun moveCamera(latLng: LatLng) {
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17f))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            RC_OPEN_LOCATION_SETTINGS -> {
+                checkGPSEnableAndStart()
+            }
+        }
+    }
+    companion object {
+        const val RC_OPEN_LOCATION_SETTINGS = 1
+        @JvmStatic
+        fun newInstance() = RecordingFragment()
     }
 
 }

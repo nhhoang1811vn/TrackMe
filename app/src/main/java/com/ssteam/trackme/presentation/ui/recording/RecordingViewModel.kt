@@ -1,9 +1,6 @@
 package com.ssteam.trackme.presentation.ui.recording
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.ssteam.trackme.domain.TrackingSession
 import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
@@ -18,23 +15,34 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
     var saveResultState = actionSave.switchMap {
         resultRepo.insert(it)
     }
-    //var isLoading = MutableLiveData<>
+    val recordingState = MutableLiveData<Int>()
+    val waitingState = recordingState.map {
+        it == STATE_WAITING
+    }
+    val runningState = recordingState.map {
+        it == STATE_RUNNING
+    }
+    val pauseState = recordingState.map{
+        it == STATE_PAUSED
+    }
     private var recordingItems = mutableListOf<RecordingItem>()
-    private val _isRunning = MutableLiveData<Boolean>()
-    val isRunning: LiveData<Boolean>
-        get() = _isRunning
 
+    init {
+        recordingState.value = STATE_WAITING
+    }
     fun start(){
         recordingItems.clear()
-        _isRunning.value = true
         trackingSession.start()
     }
+    fun setRunningState(){
+        recordingState.value = STATE_RUNNING
+    }
     fun pause(){
-        _isRunning.value = false
+        recordingState.value = STATE_PAUSED
         trackingSession.pause()
     }
     fun resume(){
-        _isRunning.value = true
+        recordingState.value = STATE_RUNNING
         trackingSession.resume()
 
     }
@@ -87,5 +95,10 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
 
     fun setRecordingItem(items: MutableList<RecordingItem>) {
         recordingItems = items
+    }
+    companion object{
+        const val STATE_WAITING = 1
+        const val STATE_RUNNING = 2
+        const val STATE_PAUSED = 3
     }
 }

@@ -7,7 +7,13 @@
         <import type="androidx.lifecycle.LiveData"/>
         <import type="com.ssteam.trackme.domain.Resource"/>
         <variable
-            name="isRunning"
+            name="waitingState"
+            type="LiveData&lt;Boolean>" />
+        <variable
+            name="runningState"
+            type="LiveData&lt;Boolean>" />
+        <variable
+            name="pauseState"
             type="LiveData&lt;Boolean>" />
         <variable
             name="pauseCallback"
@@ -21,9 +27,6 @@
         <variable
             name="saveResultState"
             type="LiveData&lt;Resource&lt;Boolean>>" />
-        <variable
-            name="isLoading"
-            type="LiveData&lt;Boolean>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +52,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/viewActions"
-            visibleGone="@{!isLoading}"
+            visibleGone="@{!waitingState}"
             />
 
         <LinearLayout
@@ -62,7 +65,7 @@
             android:orientation="vertical"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            visibleGone="@{!isLoading}"
+            visibleGone="@{!waitingState}"
             >
 
             <LinearLayout
@@ -71,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                visibleGone="@{isRunning}"
+                visibleGone="@{runningState}"
                 >
 
                 <ImageButton
@@ -89,7 +92,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_horizontal"
-                visibleGone="@{!isRunning}"
+                visibleGone="@{pauseState}"
                 >
 
                 <ImageButton
@@ -111,6 +114,7 @@
         </LinearLayout>
         <include
             layout="@layout/loading_state"
+            app:resource="@{(Resource) saveResultState}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +125,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toTopOf="parent"
-            visibleGone="@{isLoading}"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
