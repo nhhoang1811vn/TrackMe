@@ -1,15 +1,19 @@
 package com.ssteam.trackme.presentation.ui.recording
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
+import androidx.lifecycle.switchMap
 import com.ssteam.trackme.domain.TrackingSession
 import com.ssteam.trackme.domain.models.Location
 import com.ssteam.trackme.domain.models.RecordingItem
 import com.ssteam.trackme.domain.models.Result
 import com.ssteam.trackme.domain.repositories.ResultRepository
 import com.ssteam.trackme.presentation.utils.Utils
+import com.ssteam.trackme.utils.OpenForTesting
 import java.util.*
 import javax.inject.Inject
-
+@OpenForTesting
 class RecordingViewModel @Inject constructor(val trackingSession: TrackingSession, val resultRepo: ResultRepository): ViewModel() {
     private val actionSave = MutableLiveData<Result>()
     var saveResultState = actionSave.switchMap {

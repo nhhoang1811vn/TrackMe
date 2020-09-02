@@ -78,6 +78,7 @@
                 >
 
                 <ImageButton
+                    android:id="@+id/btnPause"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_pause"
@@ -96,6 +97,7 @@
                 >
 
                 <ImageButton
+                    android:id="@+id/btnResume"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_refresh"
@@ -104,6 +106,7 @@
                     />
 
                 <ImageButton
+                    android:id="@+id/btnStop"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
                     android:src="@drawable/ic_stop"

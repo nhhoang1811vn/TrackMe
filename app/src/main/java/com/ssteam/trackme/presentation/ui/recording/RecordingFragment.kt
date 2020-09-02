@@ -38,7 +38,7 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    val viewModel: RecordingViewModel by viewModels {
+    private val viewModel: RecordingViewModel by viewModels {
         viewModelFactory
     }
     var binding by autoCleared<FragmentRecordingBinding>()
@@ -102,7 +102,7 @@ class RecordingFragment : Fragment(), OnMapReadyCallback, Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.waitingState = viewModel.waitingState
         binding.runningState = viewModel.runningState
         binding.pauseState =  viewModel.pauseState

@@ -24,10 +24,10 @@ class HistoryFragment : Fragment(),Injectable {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     @Inject
     lateinit var appExecutors: AppExecutors
-    private lateinit var adapter: ResultListAdapter
     val viewModel: HistoryViewModel by viewModels {
         viewModelFactory
     }
+    private lateinit var adapter: ResultListAdapter
     var binding by autoCleared<FragmentHistoryBinding>()
 
     override fun onCreateView(
@@ -45,7 +45,7 @@ class HistoryFragment : Fragment(),Injectable {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.recordingCallback = View.OnClickListener {
             (requireActivity() as MainActivity).openRecordingFragmentWithPermissionCheck()
         }
