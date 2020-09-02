@@ -19,7 +19,7 @@ class RecordingViewModel @Inject constructor(val trackingSession: TrackingSessio
     var saveResultState = actionSave.switchMap {
         resultRepo.insert(it)
     }
-    val recordingState = MutableLiveData<Int>()
+    private final val recordingState = MutableLiveData<Int>()
     val waitingState = recordingState.map {
         it == STATE_WAITING
     }
